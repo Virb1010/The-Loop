@@ -1,0 +1,170 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #c3ceda;
+}
+
+#root {
+  height: 100%;
+  background-color: #c3ceda;
+}
+
+.App {
+  min-height: 100%;
+  text-align: center;
+  font-family: 'SpaceMono', monospace;
+}
+
+.PageTitle {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.post {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.post > div {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.navbar {
+  padding: 1rem 2rem;
+  background-color: #f8f9fa; /* Optional: set background */
+}
+
+.navbar .navbar-brand {
+  margin-right: auto;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.navbar .nav-link {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.HomePage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto; 
+    justify-content: center;
+    text-align: left;
+}
+
+.HomePageCardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.AboutMePage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto; 
+    justify-content: center;
+}
+
+.AboutMePageText {
+  width: 64rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.LinksPage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto; 
+    justify-content: center;
+}
+
+.LinksPageText {
+  width: 48rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  font-size: 1.3rem;
+}
+
+.PostPage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto; 
+    justify-content: center;
+}
+
+.PostPageTitle {
+  width: 100%;
+  height: 10rem;
+  font-size: 2.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: #6e7d8a;
+  border-top: 1.5px solid black;
+}
+
+.PostPageSubtitleWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 1.5px solid black;
+  border-bottom: 1.5px solid black;
+  background-color: #c3ceda;
+}
+
+.PostPageSubtitleWrapper::before,
+.PostPageSubtitleWrapper::after {
+  content: "";
+  flex: 1;
+  height: 0.75px;
+  background-color: black;
+  margin: 0 1rem;
+}
+
+.PostPageSubtitle {
+  font-size: 1.5rem;
+  white-space: nowrap;
+}
+
+.PostPageSideBar {
+  width: 18rem;
+  font-size: 1.5rem;       
+  row-gap: 2rem;           
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.PostPageContent {
+  width: 75%;
+  margin-top: 2rem;
+  background-color: #c3ceda;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.PostPageBodyDiv {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;;
+}
