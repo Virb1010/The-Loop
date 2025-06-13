@@ -9,7 +9,7 @@ function Post() {
     const [post, loadPost] = useState({});
 
     useEffect(() => {
-        axios.get(`107.22.119.209:3001/posts/byID/${postId}`).then((response) => {
+        axios.get(`https://loop-app.net/posts/byID/${postId}`).then((response) => {
         loadPost(response.data);
         console.log(response)
         })
