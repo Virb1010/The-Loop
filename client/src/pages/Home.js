@@ -12,7 +12,7 @@ function Home() {
     const Navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://loop-app.net/posts").then((response) => {
+        axios.get("https://api.loop-app.net/posts").then((response) => {
             setPostList(response.data);
         })
     }, [])

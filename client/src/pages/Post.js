@@ -9,7 +9,7 @@ function Post() {
     const [post, loadPost] = useState({});
 
     useEffect(() => {
-        axios.get(`https://loop-app.net/posts/byID/${postId}`).then((response) => {
+        axios.get(`https://api.loop-app.net/posts/byID/${postId}`).then((response) => {
         loadPost(response.data);
         console.log(response)
         })
