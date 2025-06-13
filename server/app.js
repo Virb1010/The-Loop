@@ -3,7 +3,11 @@ const app = express();
 const cors = require ('cors');
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: ['https://loop-app.net', 'https://www.loop-app.net'], // allow both domains
+  credentials: true
+}));
 
 const db = require('./models');
 
