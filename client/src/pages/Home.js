@@ -12,7 +12,7 @@ function Home() {
     const Navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3001/posts").then((response) => {
+        axios.get("http://107.22.119.209:3001/posts").then((response) => {
             setPostList(response.data);
         })
     }, [])
