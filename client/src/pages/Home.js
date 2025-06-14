@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import CategoryIconMap from '../utils/modules/CategoryIconMaps';
+import API_BASE_URL from '../utils/API_Base_URL'
 
 function Home() {
     const [postList, setPostList] = useState([]);
     const Navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://api.loop-app.net/posts").then((response) => {
+        axios.get(`${API_BASE_URL}/posts`).then((response) => {
             setPostList(response.data);
         })
     }, [])
@@ -20,6 +21,7 @@ function Home() {
     return (
         <div className="HomePage"> 
             {postList.map((value) => {
+                console.log("Rendering Post Card:", value);
                 return (
                     <Card
                         className="d-flex align-items-center justify-content-between p-3 rounded mt-4"

@@ -3,13 +3,14 @@ import axios from "axios";
 import {useParams} from 'react-router-dom'
 import { Button, Card, Container } from 'react-bootstrap';
 import CategoryIconMap from '../utils/modules/CategoryIconMaps';
+import API_BASE_URL from '../utils/API_Base_URL'
 
 function Post() {
     let { postId } = useParams();
     const [post, loadPost] = useState({});
 
     useEffect(() => {
-        axios.get(`https://api.loop-app.net/posts/byID/${postId}`).then((response) => {
+        axios.get(`${API_BASE_URL}/posts/byID/${postId}`).then((response) => {
         loadPost(response.data);
         console.log(response)
         })

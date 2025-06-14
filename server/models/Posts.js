@@ -4,14 +4,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+
         content: {
             type: DataTypes.TEXT,
             allowNull: false
         },
+
         author: {
             type: DataTypes.STRING,
             allowNull: false
         },
+
         category: {
             type: DataTypes.ENUM,
             values: [
@@ -23,10 +26,12 @@ module.exports = (sequelize, DataTypes) => {
             ],
             allowNull: false
         },
+
         likes: {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+
         dislikes: {
             type: DataTypes.INTEGER,
             allowNull: false

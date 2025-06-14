@@ -6,6 +6,7 @@ import Links from './pages/Links'
 import Dock from './components/Dock';
 import Post from './pages/Post';
 import PageNotFound from './pages/PageNotFound';
+import SignUpPage from './pages/SignUpPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Dock/>
       <Router>
         <Routes>
+          <Route path='/Welcome' Component={SignUpPage} />
           <Route path='/' Component={Home} />
           <Route path='/AboutMe' Component={AboutMe} />
           <Route path='/Links' Component={Links} />
