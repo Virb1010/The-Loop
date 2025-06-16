@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const Verification = sequelize.define("Verification", {
+  const AuthCode = sequelize.define("AuthCode", {
     email: 
     {
         type: DataTypes.STRING,
         allowNull: false
     },
 
-    codeHash: {
+    code: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -23,5 +23,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  return Verification;
+  return AuthCode;
 };

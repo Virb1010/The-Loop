@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require ('cors');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 
 app.use(express.json());
@@ -20,6 +21,9 @@ const db = require('./models');
 
 const postRouter = require('./routes/Posts');
 app.use('/posts', postRouter);
+
+const usersRouter = require('./routes/Users');
+app.use('/auth', usersRouter);
 
 
 db.sequelize.sync({ alter: true }).then(() => {
