@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Card, Container } from "react-bootstrap";
@@ -6,6 +6,10 @@ import axios from "axios";
 import API_BASE_URL from '../utils/API_Base_URL';
 
 function VerifyOTP() {
+  useEffect(() => {
+    document.title = "Verify OTP";
+  }, []);
+
   const [otp, setOtp] = useState("");
   const { state: form } = useLocation();
   const navigate = useNavigate();

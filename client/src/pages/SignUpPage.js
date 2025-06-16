@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Card, Container } from 'react-bootstrap';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 
 function SignUpPage() {
+  useEffect(() => {
+    document.title = "Welcome to The Loop";
+  }, []);
+
   const [activeKey, setActiveKey] = useState('signIn');
 
   return (

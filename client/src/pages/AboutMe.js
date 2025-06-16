@@ -1,7 +1,11 @@
-import React from 'react';
 import VBPixelImage from '../components/images/VBPixelImageAboutMe.png';
+import { useEffect } from 'react';
 
 function AboutMe() {
+    useEffect(() => {
+        document.title = "About Me";
+    }, []);
+
     const AboutMePageText = `
 Hi, I’m Vir. I studied computer science and cognitive & brain science because I’ve always been drawn to the ways people think and the ways we build. Somewhere along the way, I found myself caught up in the space where those two things meet - where code tries to understand people, and people try to understand machines.
 

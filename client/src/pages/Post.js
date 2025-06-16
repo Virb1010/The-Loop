@@ -13,7 +13,9 @@ function Post() {
         axios.get(`${API_BASE_URL}/posts/byID/${postId}`).then((response) => {
         loadPost(response.data);
         console.log(response)
+        document.title = `${response.data.title}`
         })
+
     }, [])
     
     return (

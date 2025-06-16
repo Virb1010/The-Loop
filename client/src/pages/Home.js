@@ -13,6 +13,8 @@ function Home() {
     const Navigate = useNavigate();
 
     useEffect(() => {
+        document.title = "Home";
+
         axios.get(`${API_BASE_URL}/posts`).then((response) => {
             setPostList(response.data);
         })

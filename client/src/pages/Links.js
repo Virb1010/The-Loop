@@ -1,6 +1,6 @@
-import React from 'react';
 import { Card } from 'react-bootstrap';
 import '../utils/fonts/fonts.css';
+import { useEffect } from 'react';
 
 import ChipIcon from '../components/images/ChipIcon.png';
 import GallantLabsIcon from '../components/images/GallantLabsIcon.png';
@@ -12,6 +12,10 @@ import VBPixelImage from '../components/images/VBPixelImageLinks.png';
 
 
 function Links() {
+    useEffect(() => {
+        document.title = "Links";
+    }, []);
+
     const LinksPageText = `
                             Thank you for visiting my website! If you're interested, here are some links 
                             where you can learn more about me, and some work that interests me. 

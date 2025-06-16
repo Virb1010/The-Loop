@@ -8,12 +8,7 @@ const jwt = require('jsonwebtoken');
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}));
-
-app.use(cors({
-  origin: ['https://loop-app.net', 'https://www.loop-app.net'], // allow both domains
+  origin: ['http://localhost:3000', 'https://loop-app.net', 'https://www.loop-app.net'], // allow both domains
   credentials: true
 }));
 
