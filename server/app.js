@@ -20,6 +20,18 @@ app.use('/posts', postRouter);
 const usersRouter = require('./routes/Users');
 app.use('/auth', usersRouter);
 
+const { exec } = require("child_process");
+
+app.post("/deploy", (req, res) => {
+  exec("sh ./deploy.sh", (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Deploy error: ${error.message}`);
+      return res.status(500).send("Deployment failed");
+    }
+    console.log(`Deploy stdout: ${stdout}`);
+    res.send("Deployment successful");
+  });
+});
 
 db.sequelize.sync({ alter: true }).then(() => {
     app.listen(3001, () => {
