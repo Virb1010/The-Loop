@@ -16,8 +16,11 @@ const db = require('./models');
 const postRouter = require('./routes/Posts');
 app.use('/posts', postRouter);
 
-const usersRouter = require('./routes/Users');
-app.use('/auth', usersRouter);
+const userRouter = require('./routes/Users');
+app.use('/auth', userRouter);
+
+const commentRouter = require("./routes/Comments");
+app.use("/comments", commentRouter);
 
 const { exec } = require("child_process");
 

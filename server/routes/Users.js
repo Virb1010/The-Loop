@@ -43,7 +43,6 @@ router.post("/sendOTP", async (req, res) => {
     }
 });
 
-
 router.post("/verifyOTP", async (req, res) => {
   const { email, code } = req.body;
   if (!email || !code) {
@@ -59,7 +58,6 @@ router.post("/verifyOTP", async (req, res) => {
   await record.save();
   res.json({ status: "OTP_VERIFIED" });
 });
-
 
 router.post("/register", async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
@@ -93,7 +91,7 @@ router.post("/signin", async (req, res) => {
   const token = jwt.sign(
     { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "7d" }
   );
 
   res.json({
