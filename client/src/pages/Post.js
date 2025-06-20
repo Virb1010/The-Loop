@@ -1,135 +1,202 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from "axios";
-import {useParams} from 'react-router-dom'
-import { Button, Card, Container } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { Button, Card } from 'react-bootstrap';
 import CategoryIconMap from '../utils/modules/CategoryIconMaps';
-import API_BASE_URL from '../utils/API_Base_URL'
+import API_BASE_URL from '../utils/API_Base_URL';
 
 function Post() {
-    let { postId } = useParams();
-    const [post, loadPost] = useState({});
+    const { postId } = useParams();
+    const [post, setPost] = useState({});
     const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState("");
+    const [newCommentContent, setNewCommentContent] = useState("");
+    const [postLikesCount, setPostLikesCount] = useState(0);
+    const [postDislikesCount, setPostDislikesCount] = useState(0);
 
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/posts/byID/${postId}`).then((response) => {
-            loadPost(response.data);
-            document.title = `${response.data.title}`
-        })
+        fetchPostData();
+        fetchComments();
+    }, [postId]);
 
-        axios.get(`${API_BASE_URL}/comments/posts/${postId}`).then((response) => {
+    const fetchPostData = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/posts/byID/${postId}`);
+            setPost(response.data);
+            setPostLikesCount(response.data.likes);
+            setPostDislikesCount(response.data.dislikes);
+            document.title = response.data.title;
+        } catch (err) {
+            console.error("Failed to fetch post:", err);
+        }
+    };
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/comments/posts/${postId}`);
             setComments(response.data);
-        });
+        } catch (err) {
+            console.error("Failed to fetch comments:", err);
+        }
+    };
 
-    }, [])
-    
-    const handleSubmitComment = async () => {
-        if (!newComment.trim()) return;
+    const handleNewCommentSubmit = async () => {
+        if (!newCommentContent.trim()) return;
 
         try {
             const token = localStorage.getItem("accessToken");
-
-            const response = await axios.post(
+            await axios.post(
                 `${API_BASE_URL}/comments/posts/${postId}`,
-                { content: newComment },
+                { content: newCommentContent },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            setComments(prev => [...prev, response.data]);
-            setNewComment("");
+            setNewCommentContent("");
+            fetchComments();
+        
         } catch (err) {
             console.error("Failed to post comment:", err);
         }
     };
 
-    return (
-        <div className='PostPage'>
-            <div className='PostPageTitle'> {post.title} </div>
+    const handlePostLike = async (isLike) => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            await axios.post(
+                `${API_BASE_URL}/posts/like/${postId}`,
+                { isLike },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
             
-            <div className='PostPageBodyDiv'>
-                <Card 
+            fetchPostData();
+        
+        } catch (err) {
+            console.error("Failed to react to post:", err);
+        }
+    };
+
+    const handleCommentLike = async (commentId, isLike) => {
+        try {
+            const token = localStorage.getItem("accessToken");
+            await axios.post(
+                `${API_BASE_URL}/comments/like/${commentId}`,
+                { isLike },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            
+            fetchComments(); 
+        
+        } catch (err) {
+            console.error("Failed to react to comment:", err);
+        }
+    };
+
+    return (
+        <div className="PostPage">
+            <div className="PostPageTitle">{post.title}</div>
+
+            <div className="PostPageBodyDiv">
+                <Card
                     className="PostPageSideBar p-3"
-                    style={{ backgroundColor: '#2f2f2f', color: '#f3efe9' }}>
-                    
+                    style={{ backgroundColor: '#2f2f2f', color: '#f3efe9' }}
+                >
                     <div className="w-100 text-center">
-                        <Button 
-                            variant="outline-light"  
-                            style={{ fontSize: '1.2rem' }} 
+                        <Button
+                            variant="outline-light"
+                            style={{ fontSize: '1.2rem' }}
                             onClick={() => window.history.back()}
                         >
                             Return to Home Screen
                         </Button>
                     </div>
-                    
-                    <div>
+
+                    <div className="mt-3">
                         {post.category}
                         {CategoryIconMap[post.category] && (
-                            <img
+                        <img
                             src={CategoryIconMap[post.category]}
                             alt={`${post.category} icon`}
                             width={50}
                             height={50}
-                            />
+                        />
                         )}
                     </div>
-                    
-                    {post.author}
-                    
-                    {/* <div className="d-flex gap-4 align-items-center"> */}
+
+                    <div className="mt-2">{post.author}</div>
+
                     <div className="d-flex gap-4 justify-content-center mt-3">
-                        <div>
+                        <div
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handlePostLike(true)}
+                        >
                             <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
-                            {post.likes}
+                            {postLikesCount}
                         </div>
-                        <div>
+                        <div
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handlePostLike(false)}
+                        >
                             <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
-                            {post.dislikes}
+                            {postDislikesCount}
                         </div>
                     </div>
                 </Card>
 
-                <div className='PostPageContent'>
+                <div className="PostPageContent">
                     {post.content}
 
-                    <div className='PostPageComments mt-4'>
-                    <h4>Leave a Comment</h4>
-                    <textarea
-                        className="form-control mb-2"
-                        rows="3"
-                        placeholder="Write your comment..."
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    />
-                    <div className="text-end">
-                        <Button variant="primary" onClick={handleSubmitComment}>
-                            Post Comment
-                        </Button>
+                    <div className="PostPageComments mt-4">
+                        <h4>Leave a Comment</h4>
+                        
+                        <textarea
+                            className="form-control mb-2"
+                            rows="3"
+                            placeholder="Write your comment..."
+                            value={newCommentContent}
+                            onChange={(e) => setNewCommentContent(e.target.value)}
+                        />
+
+                        <div className="text-end">
+                            <Button variant="primary" onClick={handleNewCommentSubmit}>
+                                Post Comment
+                            </Button>
+                        </div>
+
+                        <hr />
+
+                        <h5>Comments</h5>
+
+                        {comments.length === 0 && <p>No comments yet.</p>}
+
+                        {comments.map((comment, index) => (
+                            <Card key={index} className="mb-3 p-3">
+                                <div>
+                                    <strong>{comment.author}</strong> •{" "}
+                                    {new Date(comment.createdAt).toLocaleString()}
+                                </div>
+                                <div style={{ marginTop: '0.75rem' }}>{comment.content}</div>
+                                <div className="d-flex gap-3 mt-3">
+                                    <span
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => handleCommentLike(comment.id, true)}
+                                    >
+                                        <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
+                                        {comment.likes}
+                                    </span>
+                                    <span
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => handleCommentLike(comment.id, false)}
+                                    >
+                                        <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
+                                        {comment.dislikes}
+                                    </span>
+                                </div>
+                            </Card>
+                        ))}
                     </div>
-
-
-                    <hr />
-
-                    <h5>Comments</h5>
-                    {comments.length === 0 && <p>No comments yet.</p>}
-
-                    {comments.map((comment, index) => (
-                        <Card key={index} className="mb-3 p-3">
-                            <div><strong>{comment.author}</strong> • {new Date(comment.createdAt).toLocaleString()}</div>
-                            <div>{comment.content}</div>
-                            <div className="d-flex gap-3 mt-2">
-                                <span> <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i> {comment.likes}</span>
-                                <span> <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i> {comment.dislikes}</span>
-                            </div>
-                        </Card>
-                    ))}
                 </div>
-                </div>
-
-                
-
             </div>
         </div>
-    ) 
+    );
 }
 
 export default Post;

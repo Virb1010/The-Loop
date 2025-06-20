@@ -1,27 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const { Comments, User } = require("../models");
-const jwt = require("jsonwebtoken");
+const { Comments, CommentLikes, User } = require("../models");
+const { authenticateJWT } = require("../utils/AuthenticateJWT")
 
-function authenticateJWT(req, res, next) {
-  const authHeader = req.headers.authorization;
-  console.log("Auth Header:", authHeader);
-  console.log("JWT_SECRET:", process.env.JWT_SECRET);
+// router.get("/posts/:postId", async (req, res) => {
+//   const postId = req.params.postId;
 
-  if (!authHeader) return res.status(401).json({ error: "No token provided" });
+//   try {
+//     const comments = await Comments.findAll({
+//       where: { PostId: postId },
+//       include: [{ model: User, attributes: ['firstName', 'lastName'] }],
+//       order: [['createdAt', 'ASC']]
+//     });
 
-  const token = authHeader.split(" ")[1];
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded Token:", decoded);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    console.error("JWT verification failed:", err.message);
-    return res.status(403).json({ error: "Invalid token" });
-  }
-}
+//     const formatted = comments.map(comment => ({
+//       content: comment.content,
+//       likes: comment.likes,
+//       dislikes: comment.dislikes,
+//       createdAt: comment.createdAt,
+//       author: `${comment.User.firstName} ${comment.User.lastName}`
+//     }));
 
+//     res.json(formatted);
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to load comments" });
+//   }
+// });
 
 router.get("/posts/:postId", async (req, res) => {
   const postId = req.params.postId;
@@ -33,19 +37,34 @@ router.get("/posts/:postId", async (req, res) => {
       order: [['createdAt', 'ASC']]
     });
 
-    const formatted = comments.map(comment => ({
-      content: comment.content,
-      likes: comment.likes,
-      dislikes: comment.dislikes,
-      createdAt: comment.createdAt,
-      author: `${comment.User.firstName} ${comment.User.lastName}`
-    }));
+    const formatted = await Promise.all(
+      comments.map(async (comment) => {
+        const likes = await CommentLikes.count({
+          where: { CommentId: comment.id, isLike: true }
+        });
+
+        const dislikes = await CommentLikes.count({
+          where: { CommentId: comment.id, isLike: false }
+        });
+
+        return {
+          id: comment.id,
+          content: comment.content,
+          likes,
+          dislikes,
+          createdAt: comment.createdAt,
+          author: `${comment.User.firstName} ${comment.User.lastName}`
+        };
+      })
+    );
 
     res.json(formatted);
   } catch (err) {
+    console.error("Failed to load comments:", err);
     res.status(500).json({ error: "Failed to load comments" });
   }
 });
+
 
 router.post("/posts/:postId", authenticateJWT, async (req, res) => {
   const { content } = req.body;
@@ -77,6 +96,30 @@ router.post("/posts/:postId", authenticateJWT, async (req, res) => {
         console.error("Comment post error:", err);
         res.status(500).json({ error: "Could not post comment" });
     }
+});
+
+router.post("/like/:commentId", authenticateJWT, async (req, res) => {
+  const { commentId } = req.params;
+  const { isLike } = req.body;
+  const userId = req.user.id;
+
+  const existing = await CommentLikes.findOne({
+    where: { UserId: userId, CommentId: commentId },
+  });
+
+  if (existing) {
+    if (existing.isLike === isLike) {
+      await existing.destroy();
+      return res.json({ message: "Removed reaction" });
+    } else {
+      existing.isLike = isLike;
+      await existing.save();
+      return res.json({ message: "Reaction updated" });
+    }
+  } else {
+    await CommentLikes.create({ isLike, UserId: userId, CommentId: commentId });
+    return res.json({ message: "Reaction added" });
+  }
 });
 
 

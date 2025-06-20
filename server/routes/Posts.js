@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { Posts } = require("../models");
+const { Posts, PostLikes } = require("../models");
+const { authenticateJWT } = require("../utils/AuthenticateJWT")
 
 router.get('/', async (req, res) => {
     const postList = await Posts.findAll();
@@ -8,20 +9,54 @@ router.get('/', async (req, res) => {
 });
 
 router.get("/byID/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const post = await Posts.findByPk(id)
-        res.json(post);
-    }
-    catch(error) {
-        res.send(error)
-    }
-}); 
+  const id = req.params.id;
+
+  try {
+    const post = await Posts.findByPk(id);
+    if (!post) return res.status(404).json({ error: "Post not found" });
+
+    const likes = await PostLikes.count({ where: { PostId: id, isLike: true } });
+    const dislikes = await PostLikes.count({ where: { PostId: id, isLike: false } });
+
+    return res.json({
+      ...post.toJSON(),
+      likes,
+      dislikes
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to load post" });
+  }
+});
 
 router.post('/', async (req, res) => {
     const post = req.body;
     await Posts.create(post);
     res.json(post);
+});
+
+router.post("/like/:postId", authenticateJWT, async (req, res) => {
+  const { postId } = req.params;
+  const { isLike } = req.body;
+  const userId = req.user.id;
+
+  const existing = await PostLikes.findOne({
+    where: { UserId: userId, PostId: postId },
+  });
+
+  if (existing) {
+    if (existing.isLike === isLike) {
+      await existing.destroy();
+      return res.json({ message: "Removed reaction" });
+    } else {
+      existing.isLike = isLike;
+      await existing.save();
+      return res.json({ message: "Reaction updated" });
+    }
+  } else {
+    await PostLikes.create({ isLike, UserId: userId, PostId: postId });
+    return res.json({ message: "Reaction added" });
+  }
 });
 
 module.exports = router;
