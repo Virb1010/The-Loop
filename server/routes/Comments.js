@@ -3,30 +3,6 @@ const router = express.Router();
 const { Comments, CommentLikes, User } = require("../models");
 const { authenticateJWT } = require("../utils/AuthenticateJWT")
 
-// router.get("/posts/:postId", async (req, res) => {
-//   const postId = req.params.postId;
-
-//   try {
-//     const comments = await Comments.findAll({
-//       where: { PostId: postId },
-//       include: [{ model: User, attributes: ['firstName', 'lastName'] }],
-//       order: [['createdAt', 'ASC']]
-//     });
-
-//     const formatted = comments.map(comment => ({
-//       content: comment.content,
-//       likes: comment.likes,
-//       dislikes: comment.dislikes,
-//       createdAt: comment.createdAt,
-//       author: `${comment.User.firstName} ${comment.User.lastName}`
-//     }));
-
-//     res.json(formatted);
-//   } catch (err) {
-//     res.status(500).json({ error: "Failed to load comments" });
-//   }
-// });
-
 router.get("/posts/:postId", async (req, res) => {
   const postId = req.params.postId;
 

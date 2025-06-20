@@ -4,8 +4,29 @@ const { Posts, PostLikes } = require("../models");
 const { authenticateJWT } = require("../utils/AuthenticateJWT")
 
 router.get('/', async (req, res) => {
-    const postList = await Posts.findAll();
-    res.json(postList);
+  try {
+    const posts = await Posts.findAll({
+      order: [['createdAt', 'DESC']]
+    });
+
+    const enrichedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const likes = await PostLikes.count({ where: { PostId: post.id, isLike: true } });
+        const dislikes = await PostLikes.count({ where: { PostId: post.id, isLike: false } });
+
+        return {
+          ...post.toJSON(),
+          likes,
+          dislikes
+        };
+      })
+    );
+
+    res.json(enrichedPosts);
+  } catch (err) {
+    console.error("Failed to fetch posts:", err);
+    res.status(500).json({ error: "Failed to load posts" });
+  }
 });
 
 router.get("/byID/:id", async (req, res) => {
