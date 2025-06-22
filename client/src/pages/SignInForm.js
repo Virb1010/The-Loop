@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import API_BASE_URL from '../utils/API_Base_URL';
+import { AuthContext } from '../AuthContext';
 
 function SignInForm() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: '',
@@ -24,7 +26,7 @@ function SignInForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear any previous error
+    setError('');
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/signin`, {
         email: form.email,
@@ -33,7 +35,9 @@ function SignInForm() {
 
       localStorage.setItem("accessToken", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      login(res.data.user);
       navigate(`/`);
+
     } catch (err) {
       if (err.response && err.response.status === 401) {
         setError("Invalid credentials. Please try again.");

@@ -111,15 +111,19 @@ function Post() {
 
                     <div className="mt-3">
                         {post.category}
+                    </div>
+
+                    <div className="mt-2">
                         {CategoryIconMap[post.category] && (
-                        <img
-                            src={CategoryIconMap[post.category]}
-                            alt={`${post.category} icon`}
-                            width={50}
-                            height={50}
-                        />
+                            <img
+                                src={CategoryIconMap[post.category]}
+                                alt={`${post.category} icon`}
+                                width={50}
+                                height={50}
+                            />
                         )}
                     </div>
+                    
 
                     <div className="mt-2">{post.author}</div>
 

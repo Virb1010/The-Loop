@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Card, Container } from "react-bootstrap";
 import axios from "axios";
 import API_BASE_URL from '../utils/API_Base_URL';
+import { AuthContext } from '../AuthContext';
 
 function VerifyOTP() {
   useEffect(() => {
@@ -12,6 +13,7 @@ function VerifyOTP() {
 
   const [otp, setOtp] = useState("");
   const { state: form } = useLocation();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [error, setError] = useState('');
@@ -30,6 +32,7 @@ function VerifyOTP() {
       await axios.post(`${API_BASE_URL}/auth/signin`, { email: form.email, password: form.password }).then((res) => {
         localStorage.setItem("accessToken", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
+        login(res.data.user);
       })
 
       navigate('/');
