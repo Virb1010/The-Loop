@@ -82,8 +82,8 @@ function Home() {
                                         <img
                                             src={CategoryIconMap[value.category]}
                                             alt={`${value.category} icon`}
-                                            width={30}
-                                            height={30}
+                                            width={75}
+                                            height={75}
                                         />
                                     )}
                                 </div>
