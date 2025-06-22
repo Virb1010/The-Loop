@@ -40,7 +40,11 @@ module.exports = (sequelize, DataTypes) => {
 
     Posts.associate = (models) => {
         Posts.belongsTo(models.User);  
-        Posts.hasMany(models.Comments);
+        Posts.hasMany(models.Comments, {
+            foreignKey: 'PostId',
+            onDelete: 'CASCADE',  
+            hooks: true           
+        });
     };
 
 

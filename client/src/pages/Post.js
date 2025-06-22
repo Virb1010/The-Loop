@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Modal } from 'react-bootstrap';
 import CategoryIconMap from '../utils/modules/CategoryIconMaps';
 import API_BASE_URL from '../utils/API_Base_URL';
 
@@ -12,6 +12,11 @@ function Post() {
     const [newCommentContent, setNewCommentContent] = useState("");
     const [postLikesCount, setPostLikesCount] = useState(0);
     const [postDislikesCount, setPostDislikesCount] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState(null);
+    const [deleteTargetId, setDeleteTargetId] = useState(null);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.id;
 
     useEffect(() => {
         fetchPostData();
@@ -52,7 +57,6 @@ function Post() {
 
             setNewCommentContent("");
             fetchComments();
-        
         } catch (err) {
             console.error("Failed to post comment:", err);
         }
@@ -66,9 +70,8 @@ function Post() {
                 { isLike },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            
+
             fetchPostData();
-        
         } catch (err) {
             console.error("Failed to react to post:", err);
         }
@@ -82,11 +85,35 @@ function Post() {
                 { isLike },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            
-            fetchComments(); 
-        
+
+            fetchComments();
         } catch (err) {
             console.error("Failed to react to comment:", err);
+        }
+    };
+
+    const confirmDelete = (type, id) => {
+        setModalType(type);
+        setDeleteTargetId(id);
+        setShowModal(true);
+    };
+
+    const executeDelete = async () => {
+        const token = localStorage.getItem("accessToken");
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+
+        try {
+            if (modalType === 'post') {
+                await axios.delete(`${API_BASE_URL}/posts/${deleteTargetId}`, config);
+                window.location.href = '/';
+            } else if (modalType === 'comment') {
+                await axios.delete(`${API_BASE_URL}/comments/${deleteTargetId}`, config);
+                fetchComments();
+            }
+        } catch (err) {
+            console.error("Failed to delete:", err);
+        } finally {
+            setShowModal(false);
         }
     };
 
@@ -109,40 +136,43 @@ function Post() {
                         </Button>
                     </div>
 
-                    <div className="mt-3">
-                        {post.category}
-                    </div>
+                    <div className="mt-2">{post.author}</div>
 
-                    <div className="mt-2">
+                    <div className="mt-3 d-flex align-items-center justify-content-center gap-2">
+                        <span>{post.category}</span>
+                        
                         {CategoryIconMap[post.category] && (
                             <img
                                 src={CategoryIconMap[post.category]}
                                 alt={`${post.category} icon`}
-                                width={50}
-                                height={50}
+                                width={60}
+                                height={60}
                             />
                         )}
                     </div>
-                    
 
-                    <div className="mt-2">{post.author}</div>
+                    {post.createdAt && (
+                        <div className="mt-2" style={{ fontSize: '0.9rem', color: '#ccc' }}>
+                            {new Date(post.createdAt).toLocaleString()}
+                        </div>
+                    )}
 
                     <div className="d-flex gap-4 justify-content-center mt-3">
-                        <div
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => handlePostLike(true)}
-                        >
+                        <div style={{ cursor: 'pointer' }} onClick={() => handlePostLike(true)}>
                             <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
                             {postLikesCount}
                         </div>
-                        <div
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => handlePostLike(false)}
-                        >
+                        <div style={{ cursor: 'pointer' }} onClick={() => handlePostLike(false)}>
                             <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
                             {postDislikesCount}
                         </div>
                     </div>
+
+                    {userId === post.UserId && (
+                        <div className="text-center mt-4" style={{ cursor: 'pointer' }} onClick={() => confirmDelete('post', post.id)}>
+                            <i className="bi bi-trash3-fill fs-4 text-danger"></i>
+                        </div>
+                    )}
                 </Card>
 
                 <div className="PostPageContent">
@@ -150,7 +180,7 @@ function Post() {
 
                     <div className="PostPageComments mt-4">
                         <h4>Leave a Comment</h4>
-                        
+
                         <textarea
                             className="form-control mb-2"
                             rows="3"
@@ -171,25 +201,25 @@ function Post() {
 
                         {comments.length === 0 && <p>No comments yet.</p>}
 
-                        {comments.map((comment, index) => (
-                            <Card key={index} className="mb-3 p-3">
+                        {comments.map((comment) => (
+                            <Card key={comment.id} className="mb-3 p-3">
                                 <div>
-                                    <strong>{comment.author}</strong> •{" "}
-                                    {new Date(comment.createdAt).toLocaleString()}
+                                    <strong>{comment.author}</strong> • {new Date(comment.createdAt).toLocaleString()}
+                                    {comment.userId === userId && (
+                                        <i
+                                            className="bi bi-trash3-fill text-danger ms-2"
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() => confirmDelete('comment', comment.id)}
+                                        ></i>
+                                    )}
                                 </div>
-                                <div style={{ marginTop: '0.75rem' }}>{comment.content}</div>
+                                <div className="mt-3">{comment.content}</div>
                                 <div className="d-flex gap-3 mt-3">
-                                    <span
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => handleCommentLike(comment.id, true)}
-                                    >
+                                    <span style={{ cursor: 'pointer' }} onClick={() => handleCommentLike(comment.id, true)}>
                                         <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
                                         {comment.likes}
                                     </span>
-                                    <span
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => handleCommentLike(comment.id, false)}
-                                    >
+                                    <span style={{ cursor: 'pointer' }} onClick={() => handleCommentLike(comment.id, false)}>
                                         <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
                                         {comment.dislikes}
                                     </span>
@@ -199,6 +229,16 @@ function Post() {
                     </div>
                 </div>
             </div>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Body className="text-center">
+                    <p className="fs-5">Are you sure you wish to delete this content? This cannot be undone.</p>
+                    <div className="d-flex justify-content-center gap-3 mt-4">
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
+                        <Button variant="danger" onClick={executeDelete}>Delete</Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
     );
 }

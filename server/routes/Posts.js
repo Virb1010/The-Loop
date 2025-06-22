@@ -80,4 +80,24 @@ router.post("/like/:postId", authenticateJWT, async (req, res) => {
   }
 });
 
+router.delete('/:id', authenticateJWT, async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const post = await Posts.findByPk(postId);
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+
+    if (post.UserId !== userId) {
+      return res.status(403).json({ error: 'Unauthorized to delete this post' });
+    }
+
+    await post.destroy();
+    res.json({ message: 'Post deleted successfully' });
+  } catch (err) {
+    console.error('Failed to delete post:', err);
+    res.status(500).json({ error: 'Failed to delete post' });
+  }
+});
+
 module.exports = router;

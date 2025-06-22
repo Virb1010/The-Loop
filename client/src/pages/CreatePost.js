@@ -46,7 +46,8 @@ function CreatePost() {
         category: form.category,
         author: `${user.firstName} ${user.lastName}`,
         likes: 0,
-        dislikes: 0
+        dislikes: 0,
+        UserId: user.id
       };
 
       await axios.post(`${API_BASE_URL}/posts`, postData, {

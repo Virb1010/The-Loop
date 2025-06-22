@@ -9,11 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 function Dock() {
   const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/Welcome");
+    Navigate("/Welcome");
   };
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : null;
@@ -28,13 +28,13 @@ function Dock() {
             <Nav.Link href="/" className="text-white">Home</Nav.Link>
             <Nav.Link href="/AboutMe" className="text-white">About Me</Nav.Link>
             <Nav.Link href="/Links" className="text-white">Links</Nav.Link>
-            <Nav.Link href="/CreatePost" className="text-white">Create Post</Nav.Link>
             {fullName && (
               <NavDropdown
                 title={<span style={{ color: '#f3efe9' }}>{fullName}</span>}
                 id="user-dropdown"
                 align="end"
               >
+                <NavDropdown.Item onClick={() => Navigate(`/CreatePost`)}>Create Post</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>Log Out</NavDropdown.Item>
               </NavDropdown>
             )}

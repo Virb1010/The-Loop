@@ -7,17 +7,14 @@ function AboutMe() {
     }, []);
 
     const AboutMePageText = `
-Hi, I’m Vir. I studied computer science and cognitive & brain science because I’ve always been drawn to the ways people think and the ways we build. Somewhere along the way, I found myself caught up in the space where those two things meet - where code tries to understand people, and people try to understand machines.
+Hi, I’m Vir. I recently graduated from university with degrees in Computer Science and Cognitive & Brain Science. I chose those fields because I’ve always been drawn to how people think. I started off interested in psychology: how we form habits, make decisions, and interact with each other. But as much as I liked the questions, I wanted more concrete ways to explore them.
 
-In college, I started off interested in psychology. I wanted to know why people do what they do - how we form patterns, make decisions, and interact with each other. But as much as I loved the questions, I found myself wanting more concrete ways to explore them. When I discovered computational modeling and neurotechnology - like fMRI and brain decoding - it felt like a light switched on. Suddenly there were tools, algorithms, and languages that could engage those same questions in new ways.
+That curiosity pulled me toward human-computer interaction and brain-computer interfaces. Suddenly, the questions I cared about had new ways in - through tangible data, and systems of reasoning grounded in science. I started working on projects that explored how brain activity might relate to behavior, or how emotion could be interpreted through subtle changes in expression. What began as an interest in people became something I could build with, experiment with, and learn from.
 
-That’s how I found my way to human-computer interaction and brain-computer interfaces. For me, these aren’t just technical fields - they’re creative, curious, and deeply human. I’ve worked on projects that try to understand emotion through facial expression, or map brain activity to behavior in real time. And the more I build, the more I believe that the future of technology isn’t just smarter machines - it’s more meaningful connections between people and the tools they use.
+The more I build, the more I believe that the future of technology isn’t just about smarter machines, it’s about more meaningful connections between people and the tools they use.
+The Loop is where I hope to explore that connection in the open. It’s a space where I share what I’m working on, thinking about, and trying to understand. But it’s also meant to be a space for others to do the same, whatever form that takes. I hope we can all come together to talk about research and projects we’ve been working on, our views on the state of the tech world, our personal experiences and knowledge, or anything else! Wherever you are on your journey with technology, if you’re excited by how it shapes the way we live, work, or think, this space is for you.
 
-The Interface is my attempt to create a space for that kind of exploration. I built it as a place to share the things I’ve been working on, thinking about, and learning from - and hopefully to invite others to do the same. Whether it’s writing, projects, links, or open questions, this site is meant to be a shared workspace for anyone interested in HCI, BCIs, or tech in general.
-
-I’m still very much at the beginning of my career, and I’m learning as I go. That’s part of why this space exists - because the best way to grow is to be in conversation with other people who care about the same things, or who challenge you to think differently. If you’re curious, I’d love for you to explore, contribute, or just say hi.
-
-And if you'd like to stay tuned as this space evolves, feel free to join the mailing list. I’d love to have you along.
+I’m still early in my journey, and this site is one way I’m figuring things out as I go. If you’re interested in keeping in touch, join the mailing list (coming soon). I’d love to have you along.
 
 Let’s learn out loud - and build something meaningful while we’re at it.
 `

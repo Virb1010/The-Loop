@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Comments, CommentLikes, User } = require("../models");
-const { authenticateJWT } = require("../utils/AuthenticateJWT")
+const { authenticateJWT } = require("../utils/AuthenticateJWT");
 
 router.get("/posts/:postId", async (req, res) => {
   const postId = req.params.postId;
@@ -29,7 +29,8 @@ router.get("/posts/:postId", async (req, res) => {
           likes,
           dislikes,
           createdAt: comment.createdAt,
-          author: `${comment.User.firstName} ${comment.User.lastName}`
+          author: `${comment.User.firstName} ${comment.User.lastName}`,
+          userId: comment.UserId
         };
       })
     );
@@ -41,37 +42,37 @@ router.get("/posts/:postId", async (req, res) => {
   }
 });
 
-
 router.post("/posts/:postId", authenticateJWT, async (req, res) => {
   const { content } = req.body;
   const { postId } = req.params;
   const userId = req.user.id;
 
-    if (!content || content.trim() === "") {
-        return res.status(400).json({ error: "Comment content is required" });
-    }
+  if (!content || content.trim() === "") {
+    return res.status(400).json({ error: "Comment content is required" });
+  }
 
-    try {
-        const comment = await Comments.create({
-        content,
-        PostId: postId,
-        UserId: userId
+  try {
+    const comment = await Comments.create({
+      content,
+      PostId: postId,
+      UserId: userId
     });
 
     const user = await User.findByPk(userId);
 
     res.json({
-        content: comment.content,
-        likes: comment.likes,
-        dislikes: comment.dislikes,
-        createdAt: comment.createdAt,
-        author: `${user.firstName} ${user.lastName}`
+      id: comment.id,
+      content: comment.content,
+      likes: 0,
+      dislikes: 0,
+      createdAt: comment.createdAt,
+      author: `${user.firstName} ${user.lastName}`,
+      userId: comment.UserId
     });
-
-    } catch (err) {
-        console.error("Comment post error:", err);
-        res.status(500).json({ error: "Could not post comment" });
-    }
+  } catch (err) {
+    console.error("Comment post error:", err);
+    res.status(500).json({ error: "Could not post comment" });
+  }
 });
 
 router.post("/like/:commentId", authenticateJWT, async (req, res) => {
@@ -80,7 +81,7 @@ router.post("/like/:commentId", authenticateJWT, async (req, res) => {
   const userId = req.user.id;
 
   const existing = await CommentLikes.findOne({
-    where: { UserId: userId, CommentId: commentId },
+    where: { UserId: userId, CommentId: commentId }
   });
 
   if (existing) {
@@ -98,5 +99,27 @@ router.post("/like/:commentId", authenticateJWT, async (req, res) => {
   }
 });
 
+router.delete("/:commentId", authenticateJWT, async (req, res) => {
+  const { commentId } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const comment = await Comments.findByPk(commentId);
+
+    if (!comment) {
+      return res.status(404).json({ error: "Comment not found" });
+    }
+
+    if (comment.UserId !== userId) {
+      return res.status(403).json({ error: "You do not have permission to delete this comment" });
+    }
+
+    await comment.destroy();
+    return res.json({ message: "Comment deleted successfully" });
+  } catch (err) {
+    console.error("Delete comment error:", err);
+    res.status(500).json({ error: "Could not delete comment" });
+  }
+});
 
 module.exports = router;
