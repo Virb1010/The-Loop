@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       <AuthProvider>
         <Router>
-          <Dock />
+          {/* <Dock /> */}
           <Routes>
             <Route path="/Welcome" element={<PublicOnlyRoute><SignUpPage /></PublicOnlyRoute>} />
             <Route path="/VerifyOTP" element={<PublicOnlyRoute><OTPVerify /></PublicOnlyRoute>} />

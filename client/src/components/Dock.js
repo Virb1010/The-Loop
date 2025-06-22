@@ -17,6 +17,7 @@ function Dock() {
   };
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : null;
+  const isGuest = user?.isGuest;
 
   return (
     <Navbar style={{ backgroundColor: '#2f2f2f' }} sticky="top" expand="lg">
@@ -28,7 +29,40 @@ function Dock() {
             <Nav.Link href="/" className="text-white">Home</Nav.Link>
             <Nav.Link href="/AboutMe" className="text-white">About Me</Nav.Link>
             <Nav.Link href="/Links" className="text-white">Links</Nav.Link>
-            {fullName && (
+
+            {!user && (
+              <Nav.Link className="text-white" onClick={() => Navigate('/Welcome')}>
+                Sign In
+              </Nav.Link>
+            )}
+
+            {user && isGuest && (
+              <Nav.Link
+                onClick={() => Navigate('/Welcome')}
+                style={{
+                  backgroundColor: '#f3efe9',
+                  color: '#2f2f2f',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  padding: '6px 12px',
+                  marginLeft: '12px',
+                  transition: 'background-color 0.3s, color 0.3s'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#e6e2db';
+                  e.target.style.color = '#000';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#f3efe9';
+                  e.target.style.color = '#2f2f2f';
+                }}
+              >
+                Sign In
+              </Nav.Link>
+            )}
+
+
+            {user && !isGuest && (
               <NavDropdown
                 title={<span style={{ color: '#f3efe9' }}>{fullName}</span>}
                 id="user-dropdown"

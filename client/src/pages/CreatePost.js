@@ -6,10 +6,6 @@ import API_BASE_URL from '../utils/API_Base_URL';
 import '../utils/fonts/fonts.css';
 
 function CreatePost() {
-  useEffect(() => {
-    document.title = "Create Post";
-  }, []);
-
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -19,6 +15,15 @@ function CreatePost() {
   });
 
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    document.title = "Create Post";
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || user.isGuest) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setForm(prev => ({
@@ -32,10 +37,15 @@ function CreatePost() {
     e.preventDefault();
 
     const token = localStorage.getItem('accessToken');
-    const user = JSON.parse(localStorage.getItem('user')); // assumes `user` is stored after login
+    const user = JSON.parse(localStorage.getItem('user'));
 
     if (!user) {
       setError("User not found. Please log in again.");
+      return;
+    }
+
+    if (form.content.length < 2000) {
+      setError("Post content must be at least 2000 characters.");
       return;
     }
 
@@ -63,6 +73,9 @@ function CreatePost() {
     }
   };
 
+  const contentCharCount = form.content.length;
+  const charCountColor = contentCharCount >= 2000 ? 'green' : 'red';
+
   return (
     <div className='CreatePostPage d-flex justify-content-center align-items-center mt-5'>
       <Card className="p-4" style={{ backgroundColor: '#2f2f2f', color: '#f3efe9', border: '3px solid #f3efe9', width: '40rem' }}>
@@ -81,11 +94,16 @@ function CreatePost() {
           </Form.Group>
 
           <Form.Group controlId="postContent" className="mb-3">
-            <Form.Label>Content</Form.Label>
+            <div className="d-flex justify-content-between align-items-center">
+              <Form.Label>Content</Form.Label>
+              <span style={{ fontSize: '0.9rem', color: charCountColor }}>
+                ({contentCharCount}/2000)
+              </span>
+            </div>
             <Form.Control
               name="content"
               as="textarea"
-              rows={6}
+              rows={10}
               placeholder="Write your post..."
               value={form.content}
               onChange={handleChange}
