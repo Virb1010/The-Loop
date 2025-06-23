@@ -251,17 +251,6 @@ function Post() {
                 </div>
                 <div className="mt-3">{comment.content}</div>
 
-                {/* <div className="d-flex gap-3 mt-3">
-                  <span style={{ cursor: 'pointer' }} onClick={() => handleCommentLike(comment.id, true)}>
-                    <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
-                    {comment.likes}
-                  </span>
-                  <span style={{ cursor: 'pointer' }} onClick={() => handleCommentLike(comment.id, false)}>
-                    <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
-                    {comment.dislikes}
-                  </span>
-                </div> */}
-
                 <div className="d-flex gap-3 mt-3">
                   <Button
                     variant="success"

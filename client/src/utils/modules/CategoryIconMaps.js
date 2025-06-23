@@ -2,11 +2,11 @@ import ConceptExplanationIcon from '../../components/images/ConceptExplanationIc
 import OpinionPieceIcon from '../../components/images/OpinionPieceIcon.png';
 import OtherIcon from '../../components/images/OtherIcon.png';
 import ProjectLogIcon from '../../components/images/ProjectLogIcon.png';
-import ResearchPaperIcon from '../../components/images/ResearchPaperIcon.png';
+import ResearchIcon from '../../components/images/ResearchIcon.png';
 
 const CategoryIconMap = {
     "Opinion Piece": OpinionPieceIcon,
-    "Research Paper": ResearchPaperIcon,
+    "Research": ResearchIcon,
     "Concept Explanation": ConceptExplanationIcon,
     "Project Log": ProjectLogIcon,
     "Other": OtherIcon

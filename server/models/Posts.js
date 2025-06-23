@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM,
             values: [
                 'Opinion Piece',
-                'Research Paper',
+                'Research',
                 'Concept Explanation',
                 'Project Log',
                 'Other'

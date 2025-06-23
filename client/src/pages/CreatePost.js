@@ -115,7 +115,7 @@ function CreatePost() {
             <Form.Label>Category</Form.Label>
             <Form.Select name="category" value={form.category} onChange={handleChange}>
               <option>Opinion Piece</option>
-              <option>Research Paper</option>
+              <option>Research</option>
               <option>Concept Explanation</option>
               <option>Project Log</option>
               <option>Other</option>
