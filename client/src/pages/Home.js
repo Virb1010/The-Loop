@@ -90,11 +90,17 @@ function Home() {
                                 <Card.Text style={{ overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: '10rem' }}>
                                     {value.content.slice(0, 300)}{value.content.length > 300 ? '...' : ''}
                                 </Card.Text>
-                                <div className="d-flex justify-content-between align-items-center mt-4">
-                                    <div>{value.author}</div>
+                                <div className="d-flex justify-content-between align-items-center mt-4" style={{ fontSize: '1.25rem' }}>
+                                    <div style={{ fontWeight: 'bold' }}>{value.author}</div>
                                     <div className="d-flex gap-4">
-                                        <span><i className="bi bi-hand-thumbs-up-fill me-1" style={{ color: 'green' }}></i>{value.likes}</span>
-                                        <span><i className="bi bi-hand-thumbs-down-fill me-1" style={{ color: 'red' }}></i>{value.dislikes}</span>
+                                        <span className="d-flex align-items-center">
+                                        <i className="bi bi-hand-thumbs-up-fill me-2 fs-4" style={{ color: 'green' }}></i>
+                                        {value.likes}
+                                        </span>
+                                        <span className="d-flex align-items-center">
+                                        <i className="bi bi-hand-thumbs-down-fill me-2 fs-4" style={{ color: 'red' }}></i>
+                                        {value.dislikes}
+                                        </span>
                                     </div>
                                 </div>
                             </Card.Body>

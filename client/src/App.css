@@ -94,6 +94,7 @@ html, body {
     align-items: center;
     overflow-y: auto; 
     justify-content: center;
+    padding-bottom: 2rem;
 }
 
 .LinksPageText {

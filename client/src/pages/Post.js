@@ -171,7 +171,7 @@ function Post() {
             </div>
           )}
 
-          <div className="d-flex gap-4 justify-content-center mt-3">
+          {/* <div className="d-flex gap-4 justify-content-center mt-3">
             <div style={{ cursor: 'pointer' }} onClick={() => handlePostLike(true)}>
               <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
               {postLikesCount}
@@ -180,6 +180,28 @@ function Post() {
               <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
               {postDislikesCount}
             </div>
+          </div> */}
+
+          <div className="d-flex gap-4 justify-content-center mt-3">
+            <Button
+              variant="success"
+              className="d-flex align-items-center justify-content-center"
+              style={{ width: '40px', height: '40px' }}
+              onClick={() => handlePostLike(true)}
+            >
+              <i className="bi bi-hand-thumbs-up-fill" style={{ color: 'white' }}></i>
+            </Button>
+            <span className="align-self-center">{postLikesCount}</span>
+
+            <Button
+              variant="danger"
+              className="d-flex align-items-center justify-content-center"
+              style={{ width: '40px', height: '40px' }}
+              onClick={() => handlePostLike(false)}
+            >
+              <i className="bi bi-hand-thumbs-down-fill" style={{ color: 'white' }}></i>
+            </Button>
+            <span className="align-self-center">{postDislikesCount}</span>
           </div>
 
           {userId === post.UserId && (
@@ -228,7 +250,8 @@ function Post() {
                   )}
                 </div>
                 <div className="mt-3">{comment.content}</div>
-                <div className="d-flex gap-3 mt-3">
+
+                {/* <div className="d-flex gap-3 mt-3">
                   <span style={{ cursor: 'pointer' }} onClick={() => handleCommentLike(comment.id, true)}>
                     <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
                     {comment.likes}
@@ -237,7 +260,30 @@ function Post() {
                     <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
                     {comment.dislikes}
                   </span>
+                </div> */}
+
+                <div className="d-flex gap-3 mt-3">
+                  <Button
+                    variant="success"
+                    className="d-flex align-items-center justify-content-center"
+                    style={{ width: '36px', height: '36px' }}
+                    onClick={() => handleCommentLike(comment.id, true)}
+                  >
+                    <i className="bi bi-hand-thumbs-up-fill" style={{ color: 'white' }}></i>
+                  </Button>
+                  <span className="align-self-center">{comment.likes}</span>
+
+                  <Button
+                    variant="danger"
+                    className="d-flex align-items-center justify-content-center"
+                    style={{ width: '36px', height: '36px' }}
+                    onClick={() => handleCommentLike(comment.id, false)}
+                  >
+                    <i className="bi bi-hand-thumbs-down-fill" style={{ color: 'white' }}></i>
+                  </Button>
+                  <span className="align-self-center">{comment.dislikes}</span>
                 </div>
+
               </Card>
             ))}
           </div>
