@@ -29,16 +29,21 @@ function Post() {
   }, [postId]);
 
   const fetchPostData = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/posts/byID/${postId}`);
+  try {
+    const response = await axios.get(`${API_BASE_URL}/posts/byID/${postId}`);
+    if (!response.data || !response.data.id) {
+      navigate('/');
+    } else {
       setPost(response.data);
       setPostLikesCount(response.data.likes);
       setPostDislikesCount(response.data.dislikes);
       document.title = response.data.title;
-    } catch (err) {
-      console.error("Failed to fetch post:", err);
     }
-  };
+  } catch (err) {
+    console.error("Failed to fetch post:", err);
+    navigate('/');
+  }
+};
 
   const fetchComments = async () => {
     try {
