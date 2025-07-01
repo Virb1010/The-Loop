@@ -140,7 +140,6 @@ function Post() {
   return (
     <div className="PostPage">
       <div className="PostPageTitle">{post.title}</div>
-
       <div className="PostPageBodyDiv">
         <Card
           className="PostPageSideBar p-3"
@@ -175,17 +174,6 @@ function Post() {
               {new Date(post.createdAt).toLocaleString()}
             </div>
           )}
-
-          {/* <div className="d-flex gap-4 justify-content-center mt-3">
-            <div style={{ cursor: 'pointer' }} onClick={() => handlePostLike(true)}>
-              <i className="bi bi-hand-thumbs-up-fill fs-4 me-2" style={{ color: 'green' }}></i>
-              {postLikesCount}
-            </div>
-            <div style={{ cursor: 'pointer' }} onClick={() => handlePostLike(false)}>
-              <i className="bi bi-hand-thumbs-down-fill fs-4 me-2" style={{ color: 'red' }}></i>
-              {postDislikesCount}
-            </div>
-          </div> */}
 
           <div className="d-flex gap-4 justify-content-center mt-3">
             <Button

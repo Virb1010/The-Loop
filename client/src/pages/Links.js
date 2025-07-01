@@ -1,4 +1,4 @@
-import { Card } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 import '../utils/fonts/fonts.css';
 import { useEffect } from 'react';
 
@@ -63,22 +63,23 @@ function Links() {
 
     return (
         <div className='LinksPage'>
-            <div className='PageTitle'>{"Links"}</div>
-            <img src={VBPixelImage} alt="Vir Bhatia" width={350} height={420} />
-            <div className='LinksPageText'>{LinksPageText}</div>
-            {LinksList.map((link, index) => (
-                <Card
-                    key={index}
-                    className="d-flex flex-row align-items-center justify-content-between p-3 border border-dark rounded mt-4"
-                    style={{ height: '4rem', width: '36rem', cursor: 'pointer', backgroundColor: '#f3efe9' }}
-                    onClick={link.onClickFunc}
-                >
-                    <img src={link.image} alt={`${link.text} Icon`} width={45} height={45} />
-                    <div>{link.text}</div>
-                    <img src={RightArrowIcon} alt="Right Arrow" width={45} height={45} />
-                </Card>
-            ))}
-
+            <Container className='LinksPageContainer'>
+                <div className='PageTitle'>{"Links"}</div>
+                <img src={VBPixelImage} alt="Vir Bhatia" width={350} height={420} />
+                <div className='LinksPageText'>{LinksPageText}</div>
+                {LinksList.map((link, index) => (
+                    <Card
+                        key={index}
+                        className="d-flex flex-row align-items-center justify-content-between p-3 border border-dark rounded mt-4 LinksPageCard"
+                        style={{ height: '4rem', cursor: 'pointer', backgroundColor: '#f3efe9' }}
+                        onClick={link.onClickFunc}
+                    >
+                        <img src={link.image} alt={`${link.text} Icon`} width={45} height={45} />
+                        <div>{link.text}</div>
+                        <img src={RightArrowIcon} alt="Right Arrow" width={45} height={45} />
+                    </Card>
+                ))}
+            </Container>
         </div>
     ) 
 }

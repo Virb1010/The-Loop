@@ -22,8 +22,10 @@ Let’s learn out loud - and build something meaningful while we’re at it.
     return (
         <div className='AboutMePage'>
             <div className='PageTitle'>About Me</div>
-            <img src={VBPixelImage} alt="Vir Bhatia" width={808} height={480} />
-            <div className='AboutMePageText'>{AboutMePageText}</div>
+            <img src={VBPixelImage} alt="Vir Bhatia" className="AboutMeImage" />
+            <div className='AboutMePageTextContainer'>
+                <div className='AboutMePageText'>{AboutMePageText}</div>
+            </div>
         </div>
     )
 }
